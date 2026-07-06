@@ -1,0 +1,52 @@
+{
+    "usuarios": [
+        {
+            "_id": "user001",
+            "nombre": "Violetta",
+            "canciones": [
+                {
+                    "_id": "song001",
+                    "titulo": "Be yourself",
+                    "artista": "Audioslave",
+                    "album": " Out of Exile"
+                },
+                {
+                    "_id": "song002",
+                    "titulo": "Slide Away",
+                    "artista": "Oasis",
+                    "album": "Definitely Maybe"
+                }
+            ],
+            "reproduccion": {
+                "cancionActual": "song002",
+                "estado": "Reproduciendo",
+                "volumen": 80,
+                "meGusta": true
+            }
+        },
+        {
+            "_id": "user002",
+            "nombre": "German",
+            "canciones": [
+                {
+                    "_id": "song001",
+                    "titulo": "Nico and the Niners",
+                    "artista": "Twenty One Pilots",
+                    "album": "Trench"
+                },
+                {
+                    "_id": "song002",
+                    "titulo": "Let it go",
+                    "artista": "The Neighbourhood",
+                    "album": "I Love You"
+                }
+            ],
+            "reproduccion": {
+                "cancionActual": "song001",
+                "estado": "Reproduciendo",
+                "volumen": 700,
+                "meGusta": true
+            }
+        }
+    ]
+}
