@@ -1,8 +1,3 @@
-// =======================================
-// CONSULTAS MONGODB - PROYECTO PLAYLIST
-// Base de datos: playlist
-// Colección: usuarios
-// =======================================
 
 // Conexión a MongoDB Atlas
 var conexion = new Mongo("mongodb+srv://ivanclavijo97_db_user:ovPcjs7Bec2mIQIC@cluster0.xvhwje9.mongodb.net/");
@@ -12,10 +7,8 @@ print("==================================");
 print(" CONEXIÓN EXITOSA A PLAYLIST ");
 print("==================================");
 
-// =======================================
-// 1. LOGIN POR EMAIL
-// =======================================
 
+// 1. LOGIN POR EMAIL
 print("\n1. LOGIN");
 
 var usuario = db.usuarios.findOne({
@@ -28,10 +21,7 @@ if (usuario) {
 } else {
     print("Usuario no encontrado");
 }
-
-// =======================================
 // 2. LISTAR USUARIOS CON VOLUMEN MENOR A 10
-// =======================================
 
 print("\n2. Usuarios con volumen menor a 10");
 
@@ -41,9 +31,7 @@ db.usuarios.find({
     }
 }).forEach(printjson);
 
-// =======================================
 // 3. ACTUALIZAR PERFIL
-// =======================================
 
 print("\n3. Actualizar perfil");
 
@@ -58,9 +46,7 @@ db.usuarios.updateOne(
 
 print("Perfil actualizado");
 
-// =======================================
 // 4. INSERTAR UNA NUEVA ANIDACIÓN
-// =======================================
 
 print("\n4. Agregar nueva canción");
 
@@ -80,9 +66,7 @@ db.usuarios.updateOne(
 
 print("Canción agregada");
 
-// =======================================
 // 5. LISTAR TODAS LAS CANCIONES DE UN USUARIO
-// =======================================
 
 print("\n5. Canciones del usuario");
 
@@ -94,9 +78,7 @@ db.usuarios.find(
     }
 ).forEach(printjson);
 
-// =======================================
 // 6. BUSCAR CANCIONES POR ARTISTA
-// =======================================
 
 print("\n6. Canciones de Oasis");
 
@@ -104,9 +86,7 @@ db.usuarios.find({
     "canciones.artista": "Oasis"
 }).forEach(printjson);
 
-// =======================================
 // 7. CAMBIAR EL VOLUMEN
-// =======================================
 
 print("\n7. Cambiar volumen");
 
@@ -121,9 +101,7 @@ db.usuarios.updateOne(
 
 print("Volumen actualizado");
 
-// =======================================
 // 8. CAMBIAR EL ESTADO DE REPRODUCCIÓN
-// =======================================
 
 print("\n8. Cambiar estado");
 
@@ -138,9 +116,7 @@ db.usuarios.updateOne(
 
 print("Estado actualizado");
 
-// =======================================
 // 9. ELIMINAR UNA CANCIÓN
-// =======================================
 
 print("\n9. Eliminar canción");
 
@@ -157,9 +133,7 @@ db.usuarios.updateOne(
 
 print("Canción eliminada");
 
-// =======================================
 // 10. MOSTRAR USUARIOS REPRODUCIENDO
-// =======================================
 
 print("\n10. Usuarios reproduciendo");
 
