@@ -1,0 +1,26 @@
+{
+  "name": "ejerciciojson",
+  "version": "1.0.0",
+  "description": "Se necesita una manera de administrar la información del usuario, como las canciones disponibles y estado de reproducción ( el volumen, me gusta, estado actual de la aplicación ) de una forma organizada y facil de leer por la aplicación. Para esto se realizo un archivo JSON en el cual representa toda esta información en una estructura, permitiendo que la aplicación pueda acceder rápidamente a los datos del usuario, controlando y mostrando las canciones que está reprocuciendo sin que la información no esté desordenada.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sariiss/EjercicioJSON.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sariiss/EjercicioJSON/issues"
+  },
+  "homepage": "https://github.com/sariiss/EjercicioJSON#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.4"
+  }
+}
