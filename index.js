@@ -85,6 +85,28 @@ app.get('/api/usuarios/:id', async (req, res) => {
         resultado.status(500).json({error: "No se pudo actualizar el usuario correctamente"})
     }
 });
+app.delete('/api/usuarios/:id', async (req, res) => {
+    try {
+        const idUsuario= req.params.id;
+
+        
+        const resultado = await moongose.db.collection('usuarios').deleteOne(
+            {_id: new ObjectId(idUsuario)}
+        );
+        if (resultado.matchedCount === 0) {
+            return res.status(400).json({error: "usuario no encontrado en la base de datos o ya fue eliminado"});
+        };
+        res.json({
+            mensaje: "usuario eliminado correctamente",modificaciones: resultado.modifiedCount
+        })
+
+    } catch (error) {
+        console.error("Error al guardar:", error);
+
+        resultado.status(500).json({error: "No se pudo eliminar el usuario correctamente"})
+    }
+});
+
 
 
 app.listen(PORT, '0.0.0.0', () => {
