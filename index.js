@@ -61,6 +61,31 @@ app.post('/api/usuarios', async (req, res) => {
         res.status(500).json({ error: "Error crítico al guardar el usuario" });
     }
 });
+app.get('/api/usuarios/:id', async (req, res) => {
+    try {
+        const idUsuario= req.params.id;
+        const datosnuevos = req.body;
+
+        
+        const resultado = await moongose.db.collection('usuarios').updateOne(
+            {_id: new ObjectId(idUsuario)},
+            {$set: datosnuevos}
+        );
+        if (resultado.matchedCount === 0) {
+            return res.status(400).json({error: "Producto no encontrado en la base de datos"});
+        };
+        res.json({
+            mensaje: "Producto actualisado correctamente",modificaciones: resultado.modifiedCount
+        })
+
+    } catch (error) {
+        console.error("Error al guardar:", error);
+
+        res.status(500).json({ error: "Error crítico al guardar el usuario" });
+        resultado.status(500).json({error: "No se pudo actualizar el usuario correctamente"})
+    }
+});
+
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`El backend está escuchando en localhost:${PORT}`);
