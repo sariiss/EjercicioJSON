@@ -1,0 +1,156 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### ============================================
+### GET - Obtener todos los usuarios
+### ============================================
+GET {{baseUrl}}/usuarios
+
+### ============================================
+### GET - Obtener un usuario por ID
+### ============================================
+GET {{baseUrl}}/usuarios/u001
+
+### GET - ID que no existe (debe devolver 404)
+GET {{baseUrl}}/usuarios/id-que-no-existe
+
+### ============================================
+### POST - Crear un nuevo usuario
+### ============================================
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "_id": "u001",
+  "nombre": "Ivan Clavijo",
+  "email": "ivan@example.com",
+  "password": "clave123",
+  "canciones": [],
+  "reproduccion": {
+    "cancionActual": "Bohemian Rhapsody",
+    "estado": "Detenido",
+    "volumen": 50,
+    "meGusta": false
+  }
+}
+
+### POST - Otro usuario de prueba
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "_id": "u002",
+  "nombre": "Maria Perez",
+  "email": "maria@example.com",
+  "password": "clave456",
+  "canciones": [],
+  "reproduccion": {
+    "cancionActual": "Hotel California",
+    "estado": "Reproduciendo",
+    "volumen": 70,
+    "meGusta": true
+  }
+}
+
+### POST - Sin datos obligatorios (debe devolver 400)
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Sin ID ni email"
+}
+
+### POST - _id o email duplicado (debe devolver 400)
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "_id": "u001",
+  "nombre": "Duplicado",
+  "email": "ivan@example.com",
+  "password": "otraclave"
+}
+
+### ============================================
+### PUT - Actualizar usuario completo
+### ============================================
+PUT {{baseUrl}}/usuarios/u001
+Content-Type: application/json
+
+{
+  "nombre": "Ivan Clavijo Actualizado",
+  "email": "ivan.nuevo@example.com"
+}
+
+### PUT - Usuario que no existe (debe devolver 404)
+PUT {{baseUrl}}/usuarios/id-que-no-existe
+Content-Type: application/json
+
+{
+  "nombre": "No existe"
+}
+
+### PUT - Sin datos (debe devolver 400)
+PUT {{baseUrl}}/usuarios/u001
+Content-Type: application/json
+
+{
+}
+
+### ============================================
+### PATCH - Actualizar solo el estado de reproducción
+### ============================================
+
+### 1. Actualizar estado - caso normal (Pausado)
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}
+
+### 2. Actualizar a "Finalizado" (para luego probar el bloqueo)
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Finalizado"
+}
+
+### 3. Intentar modificar un usuario ya finalizado (debe devolver 403)
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Reproduciendo"
+}
+
+### 4. Enviar un estado inválido (debe devolver 400)
+PATCH {{baseUrl}}/actualizar-estado/u002
+Content-Type: application/json
+
+{
+  "estado": "bailando"
+}
+
+### 5. No enviar estado (debe devolver 400)
+PATCH {{baseUrl}}/actualizar-estado/u002
+Content-Type: application/json
+
+{
+}
+
+### 6. ID de usuario que no existe (debe devolver 404)
+PATCH {{baseUrl}}/actualizar-estado/id-que-no-existe
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}
+
+### ============================================
+### DELETE - Eliminar un usuario
+### ============================================
+DELETE {{baseUrl}}/usuarios/u002
+
+### DELETE - Usuario que no existe (debe devolver 404)
+DELETE {{baseUrl}}/usuarios/id-que-no-existe
