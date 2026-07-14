@@ -6,7 +6,16 @@ const UsuarioSchema = new mongoose.Schema({
     email: {type: String,required: true,unique: true},
     password: {type: String,required: true},
     canciones: [{type: Object}],
-    reproduccion: {cancionActual: String,estado: {type: String,enum: ['Reproduciendo', 'Pausado', 'Detenido']},volumen: Number,meGusta: Boolean}
+    reproduccion: {
+    cancionActual: String,
+    estado: {
+        type: String,
+        enum: ['Reproduciendo', 'Pausado', 'Detenido', 'Finalizado'],
+        default: 'Detenido'
+    },
+    volumen: Number,
+    meGusta: Boolean
+}
 }, {
     _id: false,
 });

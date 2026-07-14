@@ -1,0 +1,49 @@
+### Variable base (ajusta el puerto si es distinto)
+@baseUrl = http://localhost:3000/api/v1
+
+### 1. Actualizar estado - caso normal (Pausado)
+PATCH {{baseUrl}}/actualizar-estado/user002
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}
+
+### 2. Actualizar a "Finalizado" (para luego probar el bloqueo)
+PATCH {{baseUrl}}/actualizar-estado/user002
+Content-Type: application/json
+
+{
+  "estado": "Finalizado"
+}
+
+### 3. Intentar modificar un usuario ya finalizado (debe devolver 403)
+PATCH {{baseUrl}}/actualizar-estado/user002
+Content-Type: application/json
+
+{
+  "estado": "Reproduciendo"
+}
+
+### 4. Enviar un estado inválido (debe devolver 400)
+PATCH {{baseUrl}}/actualizar-estado/user008
+Content-Type: application/json
+
+{
+  "estado": "bailando"
+}
+
+### 5. No enviar estado (debe devolver 400)
+PATCH {{baseUrl}}/actualizar-estado/user008
+Content-Type: application/json
+
+{
+}
+
+### 6. ID de usuario que no existe (debe devolver 404)
+PATCH {{baseUrl}}/actualizar-estado/user007
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}

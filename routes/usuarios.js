@@ -161,6 +161,64 @@ router.put('/usuarios/:id', async (req, res) => {
 
 });
 
+// ================= PATCH =================
+router.patch('/actualizar-estado/:id', async (req, res) => {
+    try {
+        const { estado } = req.body;
+
+        if (!estado) {
+            return res.status(400).json({
+                error: "Debe enviar el nuevo estado."
+            });
+        }
+
+        // Validamos que el estado enviado sea uno de los permitidos
+        const estadosValidos = ['Reproduciendo', 'Pausado', 'Detenido', 'Finalizado'];
+        if (!estadosValidos.includes(estado)) {
+            return res.status(400).json({
+                error: `Estado inválido. Los valores permitidos son: ${estadosValidos.join(', ')}`
+            });
+        }
+
+        const usuario = await Usuario.findById(req.params.id);
+
+        if (!usuario) {
+            return res.status(404).json({
+                error: "Usuario no encontrado."
+            });
+        }
+
+        // Leemos el estado actual de forma segura y lo comparamos en minúsculas
+        const estadoActual = usuario.reproduccion?.estado?.toLowerCase();
+
+        // Regla de negocio: no se puede modificar si ya está finalizado
+        if (estadoActual === "finalizado") {
+            return res.status(403).json({
+                error: "No se puede modificar porque la reproducción ya está finalizada."
+            });
+        }
+
+        // Si el objeto 'reproduccion' no existe en este usuario, lo creamos vacío primero
+        if (!usuario.reproduccion) {
+            usuario.reproduccion = {};
+        }
+
+        // Actualizamos solo ese campo
+        usuario.reproduccion.estado = estado;
+        await usuario.save();
+
+        res.json({
+            mensaje: "Estado actualizado correctamente.",
+            datos: usuario
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Error interno del servidor",
+            detalle: error.message
+        });
+    }
+});
 // ================= DELETE =================
 router.delete('/usuarios/:id', async (req, res) => {
 
