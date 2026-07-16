@@ -48,7 +48,7 @@ const crearUsuario = async (req, res) => {
 const obtenerUsuarios = async (req, res) => {
     try {
         // ✅ USANDO MONGOOSE
-        const usuarios = await Usuario.find();
+        const usuarios = await Usuario.find().populate('canciones');
         
         res.json({
             success: true,
@@ -68,7 +68,7 @@ const obtenerUsuarios = async (req, res) => {
 // ================= OBTENER POR ID =================
 const obtenerUsuarioPorId = async (req, res) => {
     try {
-        const usuario = await Usuario.findById(req.params.id);
+        const usuario = await Usuario.findById(req.params.id).populate('canciones');
         
         if (!usuario) {
             return res.status(404).json({
@@ -162,6 +162,72 @@ const actualizarUsuario = async (req, res) => {
         });
     }
 };
+// ========== ACTUALIZAR ESTADO DE REPRODUCCIÓN ==========
+const actualizarEstadoReproduccion = async (req, res) => {
+    try {
+        console.log(`📥 Recibida solicitud PATCH a /actualizar-estado/${req.params.id}`);
+        
+        const { id } = req.params;
+        const { estado } = req.body;
+
+        // Validar que se envió el estado
+        if (!estado) {
+            return res.status(400).json({
+                success: false,
+                mensaje: 'El campo "estado" es obligatorio'
+            });
+        }
+
+        // Validar que el estado sea válido
+        const estadosValidos = ['Reproduciendo', 'Pausado', 'Detenido', 'Finalizado'];
+        if (!estadosValidos.includes(estado)) {
+            return res.status(400).json({
+                success: false,
+                mensaje: 'Estado inválido',
+                errores: [`El estado debe ser uno de: ${estadosValidos.join(', ')}`]
+            });
+        }
+
+        // Buscar el usuario
+        const usuario = await Usuario.findById(id);
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                mensaje: 'Usuario no encontrado'
+            });
+        }
+
+        // Verificar si el usuario está finalizado
+        if (usuario.reproduccion.estado === 'Finalizado') {
+            return res.status(403).json({
+                success: false,
+                mensaje: 'No se puede modificar un usuario finalizado'
+            });
+        }
+
+        // Actualizar el estado
+        usuario.reproduccion.estado = estado;
+        await usuario.save();
+
+        // No devolver la contraseña
+        const usuarioResponse = usuario.toObject();
+        delete usuarioResponse.password;
+
+        res.json({
+            success: true,
+            mensaje: 'Estado de reproducción actualizado',
+            usuario: usuarioResponse
+        });
+
+    } catch (error) {
+        console.error('❌ Error al actualizar estado:', error);
+        res.status(500).json({
+            success: false,
+            mensaje: 'Error al actualizar el estado',
+            errores: [error.message]
+        });
+    }
+};
 
 // ================= ELIMINAR USUARIO =================
 const eliminarUsuario = async (req, res) => {
@@ -204,5 +270,6 @@ module.exports = {
     obtenerUsuarios,
     obtenerUsuarioPorId,
     actualizarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    actualizarEstadoReproduccion  
 };

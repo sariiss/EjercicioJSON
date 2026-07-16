@@ -9,7 +9,7 @@ dns.setServers(['8.8.8.8', '1.1.1.1']);
 const app = express();
 app.use(express.json());
 
-// ================ CONEXIÓN A MONGODB ================//
+// ================ qCONEXIÓN A MONGODB ================//
 console.log('🔗 Conectando a MongoDB Atlas...');
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -27,7 +27,9 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // ================ RUTAS ================//
 const usuarioRoutes = require('./routes/usuarioRoutes');
+const cancionesRoutes = require('./routes/cancionesRoutes.js')
 app.use('/api/v1', usuarioRoutes);
+app.use('/api/v1',cancionesRoutes)
 
 // ================ RUTA RAÍZ ================//
 app.get('/', (req, res) => {

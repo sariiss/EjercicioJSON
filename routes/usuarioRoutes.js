@@ -1,20 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const usuarioController = require('../controllers/usuarioController');
+const {
+    crearUsuario,
+    obtenerUsuarios,
+    obtenerUsuarioPorId,
+    actualizarUsuario,
+    eliminarUsuario,
+    actualizarEstadoReproduccion  // 👈 NUEVA FUNCIÓN
+} = require('../controllers/usuarioController');
 
-// ================= GET TODOS =================
-router.get('/usuarios', usuarioController.obtenerUsuarios);
+// ========== RUTAS DE USUARIOS ==========
 
-// ================= GET POR ID =================
-router.get('/usuarios/:id', usuarioController.obtenerUsuarioPorId);
+// Obtener todos los usuarios
+router.get('/usuarios', obtenerUsuarios);
 
-// ================= POST =================
-router.post('/usuarios', usuarioController.crearUsuario);
+// Obtener un usuario por ID
+router.get('/usuarios/:id', obtenerUsuarioPorId);
 
-// ================= PUT =================
-router.put('/usuarios/:id', usuarioController.actualizarUsuario);
+// Crear un nuevo usuario
+router.post('/usuarios', crearUsuario);
 
-// ================= DELETE =================
-router.delete('/usuarios/:id', usuarioController.eliminarUsuario);
+// Actualizar un usuario
+router.put('/usuarios/:id', actualizarUsuario);
+
+// Eliminar un usuario
+router.delete('/usuarios/:id', eliminarUsuario);
+
+// 👇 NUEVA RUTA: Actualizar estado de reproducción
+router.patch('/actualizar-estado/:id', actualizarEstadoReproduccion);
 
 module.exports = router;

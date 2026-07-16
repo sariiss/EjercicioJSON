@@ -21,14 +21,17 @@ const UsuarioSchema = new mongoose.Schema({
         minlength: [6, 'La contraseña debe tener al menos 6 caracteres']
     },
     canciones: [{ 
-        type: Object 
+        type:String,
+        ref:'canciones',
+        required:true
     }],
     reproduccion: {
         cancionActual: String,
         estado: {
             type: String,
             enum: ['Reproduciendo', 'Pausado', 'Detenido', 'Finalizado'],
-            default: 'Detenido'
+            default: 'Detenido',
+            required: true
         },
         volumen: Number,
         meGusta: Boolean

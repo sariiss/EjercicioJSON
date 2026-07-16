@@ -1,0 +1,185 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### ============================================
+### 1. CREAR USUARIO u001
+### ============================================
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "_id": "u100",
+  "nombre": "Ivan Clavijo Ejemplo 2",
+  "email": "ivan2@example.com",
+  "password": "clave123",
+  "canciones": "song003",
+  "reproduccion": {
+    "cancionActual": "Nico and the Niners",
+    "estado": "Reproduciendo",
+    "volumen": 75,
+    "meGusta": true
+  }
+}
+
+### ============================================
+### 2. CREAR OTRO USUARIO u002 (para pruebas)
+### ============================================
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "_id": "u002",
+  "nombre": "Maria Perez",
+  "email": "maria@example.com",
+  "password": "clave456",
+  "canciones": ["song006"],
+  "reproduccion": {
+    "cancionActual": "Feel Good Inc.",
+    "estado": "Pausado",
+    "volumen": 50,
+    "meGusta": false
+  }
+}
+
+### ============================================
+### 3. GET - OBTENER TODOS LOS USUARIOS
+### ============================================
+GET {{baseUrl}}/usuarios
+
+### ============================================
+### 4. GET - OBTENER USUARIO u001
+### ============================================
+GET {{baseUrl}}/usuarios/u001
+
+### ============================================
+### 5. GET - OBTENER USUARIO u002
+### ============================================
+GET {{baseUrl}}/usuarios/u100
+
+### ============================================
+### 6. GET - USUARIO QUE NO EXISTE (404)
+### ============================================
+GET {{baseUrl}}/usuarios/id-que-no-existe
+
+### ============================================
+### 7. PUT - ACTUALIZAR USUARIO u001 (completo)
+### ============================================
+PUT {{baseUrl}}/usuarios/u001
+Content-Type: application/json
+
+{
+  "nombre": "Ivan Clavijo bendiciones",
+  "email": "ivan.nuevo@example.com",
+  "password": "nuevaClave456",
+  "canciones": ["song003", "song005", "song006"],
+  "reproduccion": {
+    "cancionActual": "Bohemian Rhapsody",
+    "volumen": 85,
+    "meGusta": true
+  }
+}
+
+### ============================================
+### 8. PUT - ACTUALIZAR SOLO NOMBRE Y EMAIL
+### ============================================
+PUT {{baseUrl}}/usuarios/u001
+Content-Type: application/json
+
+{
+  "nombre": "Ivan Clavijo",
+  "email": "ivan@example.com"
+}
+
+### ============================================
+### 9. PUT - USUARIO QUE NO EXISTE (404)
+### ============================================
+PUT {{baseUrl}}/usuarios/u1000
+Content-Type: application/json
+
+{
+  "nombre": "No existe"
+}
+
+### ============================================
+### 10. PATCH - ACTUALIZAR ESTADO DE REPRODUCCIÓN
+### ============================================
+
+### 10a. Cambiar a "Pausado"
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}
+
+### 10b. Cambiar a "Detenido"
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Detenido"
+}
+
+### 10c. Cambiar a "Reproduciendo"
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Reproduciendo"
+}
+
+### 10d. Cambiar a "Finalizado" (para probar bloqueo)
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Finalizado"
+}
+
+### 10e. INTENTAR CAMBIAR USUARIO FINALIZADO (debe dar 403)
+PATCH {{baseUrl}}/actualizar-estado/u001
+Content-Type: application/json
+
+{
+  "estado": "Reproduciendo"
+}
+
+### 10f. ESTADO INVÁLIDO (debe dar 400)
+PATCH {{baseUrl}}/actualizar-estado/u002
+Content-Type: application/json
+
+{
+  "estado": "bailando"
+}
+
+### 10g. SIN ENVIAR ESTADO (debe dar 400)
+PATCH {{baseUrl}}/actualizar-estado/u002
+Content-Type: application/json
+
+{
+}
+
+### 10h. USUARIO QUE NO EXISTE (404)
+PATCH {{baseUrl}}/actualizar-estado/id-que-no-existe
+Content-Type: application/json
+
+{
+  "estado": "Pausado"
+}
+
+### ============================================
+### 11. DELETE - ELIMINAR USUARIO
+### ============================================
+
+### 11a. Eliminar usuario u002
+DELETE {{baseUrl}}/usuarios/u001
+
+### 11b. Eliminar usuario que no existe (404)
+DELETE {{baseUrl}}/usuarios/id-que-no-existe
+
+### 11c. Eliminar usuario u001 (el principal)
+DELETE {{baseUrl}}/usuarios/u001
+
+### ============================================
+### 12. VERIFICAR USUARIOS RESTANTES
+### ============================================
+GET {{baseUrl}}/usuarios

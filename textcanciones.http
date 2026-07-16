@@ -1,0 +1,111 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### ============================================
+### 1. CREAR CANCIÓN (POST)
+### ============================================
+
+### Crear una canción individual
+POST http://localhost:3000/api/v1/canciones
+Content-Type: application/json
+
+{
+  "_id": "song006",
+  "titulo": "Stressed Out",
+  "artista": "Twenty One Pilots",
+  "album": "Blurryface"
+}
+### Crear canción 2 - Pop
+POST {{baseUrl}}/canciones
+Content-Type: application/json
+
+{
+    "_id": "song007",
+    "titulo": "Thriller",
+    "artista": "Michael Jackson",
+    "album": "Thriller"
+}
+
+### ============================================
+### 2. OBTENER TODAS LAS CANCIONES (GET)
+### ============================================
+
+### Obtener todas las canciones
+GET {{baseUrl}}/canciones
+
+### ============================================
+### 3. OBTENER CANCIÓN POR ID (GET)
+### ============================================
+
+### Obtener canción por ID específico
+GET {{baseUrl}}/canciones/song005
+
+### Obtener otra canción
+GET {{baseUrl}}/canciones/song007
+
+### ============================================
+### 4. ACTUALIZAR CANCIÓN (PUT)
+### ============================================
+
+### Actualizar título y artista
+PUT {{baseUrl}}/canciones/song005
+Content-Type: application/json
+
+{
+    "titulo": "Bohemian Rhapsody (Remastered 2024)",
+    "artista": "Queen",
+    "album": "A Night at the Opera (Deluxe Edition)"
+}
+
+### Actualizar solo el álbum
+PUT {{baseUrl}}/canciones/song007
+Content-Type: application/json
+
+{
+    "album": "Thriller 25th Anniversary"
+}
+
+### ============================================
+### 5. ELIMINAR CANCIÓN (DELETE)
+### ============================================
+
+### Eliminar una canción específica
+DELETE {{baseUrl}}/canciones/song007
+
+### ============================================
+### 6. PRUEBAS DE ERRORES
+### ============================================
+
+### Intentar crear canción sin ID (error)
+POST {{baseUrl}}/canciones
+Content-Type: application/json
+
+{
+    "titulo": "Canción sin ID",
+    "artista": "Artista desconocido",
+    "album": "Álbum desconocido"
+}
+
+### Intentar crear canción con ID duplicado (error)
+POST {{baseUrl}}/canciones
+Content-Type: application/json
+
+{
+    "_id": "cancion001",
+    "titulo": "Otra canción",
+    "artista": "Otro artista",
+    "album": "Otro álbum"
+}
+
+### Intentar obtener canción con ID inexistente
+GET {{baseUrl}}/canciones/id_inexistente
+
+### Intentar actualizar canción con ID inexistente
+PUT {{baseUrl}}/canciones/id_inexistente
+Content-Type: application/json
+
+{
+    "titulo": "Actualización fallida"
+}
+
+### Intentar eliminar canción con ID inexistente
+DELETE {{baseUrl}}/canciones/id_inexistente
