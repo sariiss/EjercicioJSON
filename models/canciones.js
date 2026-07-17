@@ -1,3 +1,4 @@
+const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
 
 const CancionSchema = new mongoose.Schema({
@@ -19,7 +20,9 @@ const CancionSchema = new mongoose.Schema({
     }
 
 }, {
-    _id: false, // Desactivamos _id automático porque usamos _id personalizado
+    _id: false,
+    timestamps:true // Desactivamos _id automático porque usamos _id personalizado
 });
+
 
 module.exports = mongoose.model('canciones', CancionSchema);

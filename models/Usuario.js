@@ -37,7 +37,8 @@ const UsuarioSchema = new mongoose.Schema({
         meGusta: Boolean
     }
 }, {
-    _id: false, // Desactivamos _id automático porque usamos _id personalizado
+    _id: false,
+    timestamps:true// Desactivamos _id automático porque usamos _id personalizado
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema);
