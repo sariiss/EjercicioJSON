@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const dns = require('dns');
 require('dotenv').config();
 
@@ -7,59 +8,25 @@ require('dotenv').config();
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 const app = express();
+
+// ================ MIDDLEWARES ================//
+app.use(cors());
 app.use(express.json());
 
-// ================ CACHÉ PARA CONEXIÓN EN VERCEL ================//
-let cached = global.mongoose;
+// ================ CONEXIÓN A MONGODB ================//
+console.log('🔗 Conectando a MongoDB Atlas...');
 
-if (!cached) {
-    cached = global.mongoose = { conn: null, promise: null };
-}
-
-const connectDB = async () => {
-    if (cached.conn) {
-        console.log("✅ Usando conexión existente a MongoDB");
-        return cached.conn;
-    }
-
-    if (!cached.promise) {
-        console.log('🔗 Conectando a MongoDB Atlas...');
-        
-        const opts = {
-            serverSelectionTimeoutMS: 30000,
-            socketTimeoutMS: 45000,
-            bufferCommands: false,
-            maxPoolSize: 1,
-        };
-
-        cached.promise = mongoose.connect(process.env.MONGO_URI, opts)
-            .then((mongoose) => {
-                console.log('✅ Conectado a MongoDB Atlas');
-                console.log(`📊 Base de datos: ${mongoose.connection.db.databaseName}`);
-                return mongoose;
-            })
-            .catch(err => {
-                console.error('❌ Error al conectar a MongoDB Atlas:');
-                console.error(`   ${err.message}`);
-                throw err;
-            });
-    }
-
-    cached.conn = await cached.promise;
-    return cached.conn;
-};
-
-// ================ MIDDLEWARE PARA CONECTAR DB EN CADA REQUEST ================//
-app.use(async (req, res, next) => {
-    try {
-        await connectDB();
-        next();
-    } catch (error) {
-        console.error("❌ Error de conexión a DB:", error);
-        res.status(503).json({ 
-            error: "Servicio no disponible: Error de conexión a la base de datos" 
-        });
-    }
+mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+})
+.then(() => {
+    console.log('✅ Conectado a MongoDB Atlas');
+    console.log(`📊 Base de datos: ${mongoose.connection.db.databaseName}`);
+})
+.catch(err => {
+    console.error('❌ Error al conectar a MongoDB Atlas:');
+    console.error(`   ${err.message}`);
 });
 
 // ================ RUTAS ================//
@@ -98,13 +65,9 @@ app.get('/', (req, res) => {
     });
 });
 
-// ================ EXPORTAR PARA VERCEL ================//
-module.exports = app;
+// ================ INICIAR SERVIDOR ================//
+const PORT = process.env.PORT || 3000;
 
-// ================ INICIAR SERVIDOR (SOLO EN LOCAL) ================//
-if (require.main === module) {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`🚀 Servidor en http://localhost:${PORT}`);
-    });
-}
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Servidor en http://localhost:${PORT}`);
+});
