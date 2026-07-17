@@ -1,4 +1,5 @@
 const Usuario = require("../models/Usuario");
+const conectarBD = require('../config/db');
 
 // ================= CREAR USUARIO =================
 const crearUsuario = async (req, res) => {
