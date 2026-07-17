@@ -34,7 +34,7 @@ const UsuarioSchema = new mongoose.Schema({
             required: true
         },
         volumen: Number,
-        meGusta: Boolean
+        meGusta: Boolean,
     }
 }, {
     _id: false,
